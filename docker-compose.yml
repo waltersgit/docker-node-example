@@ -1,0 +1,45 @@
+version: "2"
+
+services:
+    backend:
+        restart: always
+        build: ./backend/.
+        ports:
+            - "3000:3000"
+        links:
+            - mongo
+        networks:
+            - backend-bridge
+        volumes:
+            - ./backend/:/usr/app/src
+    frontend:
+        restart: always
+        build: ./frontend/.
+        volumes:
+            - ./frontend/:/usr/app/src
+        tty: true
+    nginx:
+        restart: always
+        build: ./nginx/
+        ports:
+            - 80:80
+        networks:
+            - backend-bridge
+        volumes_from:
+            - frontend
+        links:
+            - frontend
+            - backend
+    mongo:
+        image: bitnami/mongodb
+        volumes:
+            - ./data:/data
+        ports:
+            - "27017:27017"
+        environment:
+            - MONGODB_ROOT_PASSWORD=root
+        networks:
+            - backend-bridge
+
+networks:
+    backend-bridge:
