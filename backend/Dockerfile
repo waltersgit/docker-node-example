@@ -2,7 +2,7 @@ FROM node:carbon
 
 MAINTAINER conlyc
 
-RUN npm install --global nodemon
+RUN npm install pm2 -g
 
 ADD package.json /tmp/package.json
 RUN cd /tmp && npm install  
@@ -13,4 +13,4 @@ COPY . /usr/app/src
 
 EXPOSE 3000
 
-CMD ["nodemon", "-L", "/usr/app/src/bin/www"]
+CMD  pm2 start --no-daemon  /usr/app/src/bin/www --watch
