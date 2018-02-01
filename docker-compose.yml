@@ -17,7 +17,10 @@ services:
         build: ./frontend/.
         volumes:
             - ./frontend/:/usr/app/src
-        tty: true
+        networks:
+            - backend-bridge
+        ports:
+            - "8080:8080"
     nginx:
         restart: always
         build: ./nginx/
