@@ -8,6 +8,7 @@ services:
             - "3000:3000"
         links:
             - mongo
+            - redis
         networks:
             - backend-bridge
         volumes:
@@ -34,13 +35,23 @@ services:
             - frontend
             - backend
     mongo:
-        image: bitnami/mongodb
+        image: bitnami/mongodb:3.6-master
         volumes:
-            - ./data:/data
+            - ./data:/bitnami
         ports:
             - "27017:27017"
         environment:
             - MONGODB_ROOT_PASSWORD=root
+        networks:
+            - backend-bridge
+    redis:
+        image: bitnami/redis:latest
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        ports:
+            - '6379:6379'
+        volumes:
+            - ./redis-persistence:/bitnami
         networks:
             - backend-bridge
 

@@ -1,10 +1,14 @@
 var express = require('express');
 var router = express.Router();
+var {redisClient, getAsync} = require('../db/redis.js');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/',async function (req, res, next) {
+    redisClient.set("foo", "bar");
+    var val = await getAsync('foo');
     res.send({
-        "name": "PETER"
+        "name": "PETER",
+        "redisTestValue": val
     })
 });
 
